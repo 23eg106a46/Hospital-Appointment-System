@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hospital Appointment Priority System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg:       #f4f6fb;
+  --bg2:      #eef1f8;
+  --white:    #ffffff;
+  --navy:     #0f2044;
+  --navy2:    #1a3560;
+  --teal:     #0ea5a0;
+  --teal-lt:  #e6f7f7;
+  --teal-md:  #b3e8e7;
+  --rose:     #f04f72;
+  --rose-lt:  #fde8ee;
+  --amber:    #f59e0b;
+  --amber-lt: #fef3dc;
+  --blue:     #3b82f6;
+  --blue-lt:  #eff6ff;
+  --green:    #10b981;
+  --green-lt: #ecfdf5;
+  --text:     #0f2044;
+  --text2:    #4b5c7a;
+  --text3:    #9aaac2;
+  --border:   #e4e9f2;
+  --border2:  #d0d8eb;
+  --shadow:   0 1px 4px rgba(15,32,68,0.07), 0 4px 16px rgba(15,32,68,0.06);
+  --shadow2:  0 2px 8px rgba(15,32,68,0.08);
+  --radius:   14px;
+  --radius2:  10px;
+  --radius3:  8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; line-height:1.5; }
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── AUTH SCREENS ── */
+.auth-screen {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
+  padding:24px;
+}
+
+.auth-box {
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:44px 44px;
+  width:440px;
+  box-shadow:0 4px 32px rgba(15,32,68,0.10);
+  animation:fadeUp 0.4s ease;
+}
+
+.auth-logo {
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.auth-logo-icon {
+  width:60px; height:60px;
+  background:linear-gradient(135deg,var(--teal),#0c7a96);
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px;
+  margin:0 auto 14px;
+  box-shadow:0 6px 20px rgba(14,165,160,0.25);
+}
+
+.auth-logo h1 {
+  font-family:'Outfit',sans-serif;
+  font-size:20px; font-weight:800;
+  color:var(--navy);
+  margin-bottom:5px;
+  line-height:1.3;
+}
+
+.auth-logo p {
+  font-size:13px;
+  color:var(--text3);
+}
+
+.auth-tabs {
+  display:flex;
+  background:var(--bg);
+  border-radius:var(--radius3);
+  padding:4px;
+  margin-bottom:24px;
+}
+
+.auth-tab {
+  flex:1; padding:9px;
+  text-align:center;
+  border-radius:6px;
+  font-size:13.5px; font-weight:600;
+  cursor:pointer; border:none;
+  background:transparent;
+  color:var(--text3);
+  transition:all 0.2s;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+.auth-tab.active {
+  background:var(--white);
+  color:var(--teal);
+  box-shadow:0 1px 4px rgba(15,32,68,0.10);
+}
+
+.auth-form { display:none; }
+.auth-form.active { display:block; animation:fadeUp 0.25s ease; }
+
+.field { margin-bottom:15px; }
+.field label {
+  display:block;
+  font-size:11px; font-weight:700;
+  color:var(--text2);
+  text-transform:uppercase; letter-spacing:0.07em;
+  margin-bottom:6px;
+}
+.field input, .field select {
+  width:100%; padding:11px 15px;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius3);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px; color:var(--text);
+  background:var(--white); outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.field input:focus, .field select:focus {
+  border-color:var(--teal);
+  box-shadow:0 0 0 3px rgba(14,165,160,0.1);
+}
+.field input::placeholder { color:var(--text3); }
+
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+.btn-auth {
+  width:100%; padding:13px;
+  background:linear-gradient(135deg,var(--teal),#0c7a96);
+  color:white; border:none;
+  border-radius:var(--radius3);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15px; font-weight:600;
+  cursor:pointer; margin-top:6px;
+  transition:opacity 0.2s,transform 0.15s;
+  box-shadow:0 4px 14px rgba(14,165,160,0.28);
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.btn-auth:hover { opacity:0.92; transform:translateY(-1px); }
+
+.divider {
+  display:flex; align-items:center; gap:12px;
+  margin:18px 0 6px;
+  color:var(--text3); font-size:12px;
+}
+.divider::before, .divider::after {
+  content:''; flex:1;
+  height:1px; background:var(--border);
+}
+
+.terms {
+  font-size:12px; color:var(--text3);
+  text-align:center; margin-top:14px; line-height:1.6;
+}
+.terms span { color:var(--teal); cursor:pointer; font-weight:600; }
+
+/* ── APP ── */
+.app { display:none; }
+.layout { display:flex; min-height:100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width:236px; background:var(--white); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; flex-shrink:0; padding:24px 0;
+}
+.sidebar-logo { padding:0 20px 20px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+.brand { display:flex; align-items:center; gap:10px; }
+.brand-icon {
+  width:36px; height:36px;
+  background:linear-gradient(135deg,var(--teal),#0c7a96);
+  border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-size:16px; box-shadow:0 3px 10px rgba(14,165,160,0.25);
+}
+.brand-name { font-family:'Outfit',sans-serif; font-size:18px; font-weight:800; color:var(--navy); }
+.nav-section { padding:0 12px; }
+.nav-label { font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:0.1em; padding:0 10px; margin:14px 0 5px; }
+.nav-item {
+  display:flex; align-items:center; gap:10px; padding:10px 12px;
+  border-radius:var(--radius3); color:var(--text2); font-size:13.5px; font-weight:500;
+  cursor:pointer; border:none; background:transparent; width:100%; text-align:left;
+  transition:all 0.18s; margin-bottom:2px;
+}
+.nav-item i { width:17px; font-size:13px; }
+.nav-item:hover { background:var(--bg); color:var(--text); }
+.nav-item.active { background:var(--teal-lt); color:var(--teal); font-weight:600; }
+.nav-item.active i { color:var(--teal); }
+.sidebar-footer { margin-top:auto; padding:16px 20px 0; border-top:1px solid var(--border); }
+.user-row { display:flex; align-items:center; gap:10px; }
+.user-av {
+  width:36px; height:36px; border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),#0c7a96); color:white;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; flex-shrink:0;
+}
+.user-meta { flex:1; min-width:0; }
+.user-name { font-size:13px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.user-role { font-size:11px; color:var(--text3); }
+.logout-btn { background:none; border:none; color:var(--text3); cursor:pointer; font-size:14px; padding:4px; transition:color 0.2s; }
+.logout-btn:hover { color:var(--rose); }
+
+/* TOPBAR */
+.topbar {
+  background:var(--white); border-bottom:1px solid var(--border);
+  padding:0 32px; height:56px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.topbar-title { font-family:'Outfit',sans-serif; font-size:15px; font-weight:700; color:var(--navy); }
+.topbar-right { display:flex; align-items:center; gap:10px; }
+.topbar-time { font-size:12px; color:var(--text3); }
+
+/* MAIN */
+.main { flex:1; padding:32px; overflow-y:auto; min-width:0; }
+.page { display:none; animation:fadeUp 0.28s ease; }
+.page.active { display:block; }
+.page-header { margin-bottom:26px; }
+.page-header h2 { font-family:'Outfit',sans-serif; font-size:22px; font-weight:700; color:var(--navy); }
+.page-header p { color:var(--text2); font-size:13.5px; margin-top:3px; }
+
+/* STAT GRID */
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:22px; }
+.stat-card {
+  background:var(--white); border:1px solid var(--border); border-radius:var(--radius);
+  padding:20px; position:relative; overflow:hidden; box-shadow:var(--shadow);
+  transition:transform 0.18s,box-shadow 0.18s;
+}
+.stat-card:hover { transform:translateY(-2px); box-shadow:var(--shadow2); }
+.stat-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:14px 14px 0 0; }
+.s-teal::after  { background:var(--teal); }
+.s-rose::after  { background:var(--rose); }
+.s-amber::after { background:var(--amber); }
+.s-blue::after  { background:var(--blue); }
+.stat-icon { width:40px; height:40px; border-radius:var(--radius3); display:flex; align-items:center; justify-content:center; font-size:16px; margin-bottom:14px; }
+.s-teal  .stat-icon { background:var(--teal-lt);  color:var(--teal); }
+.s-rose  .stat-icon { background:var(--rose-lt);  color:var(--rose); }
+.s-amber .stat-icon { background:var(--amber-lt); color:var(--amber); }
+.s-blue  .stat-icon { background:var(--blue-lt);  color:var(--blue); }
+.stat-num { font-family:'Outfit',sans-serif; font-size:30px; font-weight:800; line-height:1; margin-bottom:5px; }
+.s-teal  .stat-num { color:var(--teal); }
+.s-rose  .stat-num { color:var(--rose); }
+.s-amber .stat-num { color:var(--amber); }
+.s-blue  .stat-num { color:var(--blue); }
+.stat-label { font-size:12.5px; color:var(--text2); font-weight:500; }
+
+/* CARD */
+.card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px; box-shadow:var(--shadow); margin-bottom:20px; }
+.card-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.card-title { font-family:'Outfit',sans-serif; font-size:15px; font-weight:700; color:var(--navy); display:flex; align-items:center; gap:8px; }
+.card-title i { color:var(--teal); font-size:14px; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+/* FORM */
+.form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:14px; margin-bottom:18px; }
+.ff { display:flex; flex-direction:column; gap:5px; }
+.ff label { font-size:11px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.07em; }
+.ff input, .ff select {
+  padding:10px 13px; border:1.5px solid var(--border); border-radius:var(--radius3);
+  font-family:'Plus Jakarta Sans',sans-serif; font-size:13.5px; color:var(--text);
+  background:var(--white); outline:none; transition:border-color 0.2s,box-shadow 0.2s;
+}
+.ff input:focus,.ff select:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(14,165,160,0.09); }
+.ff input::placeholder { color:var(--text3); }
+
+/* BUTTONS */
+.btn { display:inline-flex; align-items:center; gap:7px; padding:9px 18px; border-radius:var(--radius3); border:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:13.5px; font-weight:600; cursor:pointer; transition:all 0.18s; }
+.btn-primary { background:linear-gradient(135deg,var(--teal),#0c7a96); color:white; box-shadow:0 3px 10px rgba(14,165,160,0.22); }
+.btn-primary:hover { opacity:0.9; transform:translateY(-1px); }
+.btn-outline { background:var(--white); color:var(--teal); border:1.5px solid var(--teal-md); }
+.btn-outline:hover { background:var(--teal-lt); }
+.btn-ghost { background:var(--bg); color:var(--text2); border:1px solid var(--border); }
+.btn-ghost:hover { background:var(--bg2); color:var(--text); }
+.btn-export { background:var(--blue-lt); color:var(--blue); border:1px solid #bfdbfe; }
+.btn-export:hover { background:#dbeafe; }
+.btn-sm { padding:7px 13px; font-size:12.5px; }
+
+/* FILTER */
+.filter-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+.filter-row input, .filter-row select {
+  padding:9px 13px; border:1.5px solid var(--border); border-radius:var(--radius3);
+  font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; color:var(--text);
+  background:var(--white); outline:none; min-width:155px; transition:border-color 0.2s;
+}
+.filter-row input:focus,.filter-row select:focus { border-color:var(--teal); }
+.filter-row input::placeholder { color:var(--text3); }
+
+/* TABLE */
+.table-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius2); margin-top:4px; }
+table { width:100%; border-collapse:collapse; }
+thead tr { background:var(--bg); }
+thead th { padding:11px 16px; text-align:left; font-size:11px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.07em; white-space:nowrap; border-bottom:1px solid var(--border); }
+tbody tr { transition:background 0.12s; }
+tbody tr:hover { background:#f8fafd; }
+tbody tr:not(:last-child) td { border-bottom:1px solid var(--border); }
+tbody td { padding:11px 16px; font-size:13.5px; color:var(--text); vertical-align:middle; }
+
+/* BADGES */
+.badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:0.04em; white-space:nowrap; }
+.badge-crit  { background:var(--rose-lt);  color:var(--rose);  border:1px solid #f9b8c8; }
+.badge-high  { background:var(--amber-lt); color:#d97706;      border:1px solid #fcd89a; }
+.badge-med   { background:var(--blue-lt);  color:var(--blue);  border:1px solid #bfdbfe; }
+.badge-low   { background:var(--green-lt); color:var(--green); border:1px solid #a7f3d0; }
+.badge-1 { background:var(--green-lt); color:var(--green); border:1px solid #a7f3d0; }
+.badge-2 { background:var(--blue-lt);  color:var(--blue);  border:1px solid #bfdbfe; }
+.badge-3 { background:var(--amber-lt); color:#d97706;      border:1px solid #fcd89a; }
+.badge-4 { background:#fff1eb;         color:#c2410c;      border:1px solid #fdba74; }
+.badge-5 { background:var(--rose-lt);  color:var(--rose);  border:1px solid #f9b8c8; }
+
+/* AVATAR */
+.avatar { width:32px; height:32px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+.av-teal  { background:var(--teal-lt);  color:var(--teal); }
+.av-blue  { background:var(--blue-lt);  color:var(--blue); }
+.av-rose  { background:var(--rose-lt);  color:var(--rose); }
+.av-amber { background:var(--amber-lt); color:#d97706; }
+.name-cell { display:flex; align-items:center; gap:9px; }
+
+/* QUEUE */
+.q-item { display:flex; align-items:center; gap:11px; padding:11px 0; border-bottom:1px solid var(--border); }
+.q-item:last-child { border-bottom:none; padding-bottom:0; }
+.q-rank { font-family:'Outfit',sans-serif; font-size:13px; font-weight:800; color:var(--text3); min-width:22px; }
+.q-info { flex:1; }
+.q-name { font-size:13.5px; font-weight:600; color:var(--text); }
+.q-sub  { font-size:12px; color:var(--text3); margin-top:1px; }
+
+.empty { text-align:center; padding:40px 20px; color:var(--text3); font-size:13.5px; }
+.empty i { font-size:26px; display:block; margin-bottom:10px; opacity:0.35; }
+
+/* SUCCESS TOAST */
+.toast {
+  position:fixed; top:24px; right:24px;
+  background:var(--green); color:white;
+  padding:12px 20px; border-radius:var(--radius3);
+  font-size:13.5px; font-weight:600;
+  box-shadow:0 4px 16px rgba(16,185,129,0.3);
+  display:none; align-items:center; gap:8px;
+  z-index:999; animation:fadeUp 0.3s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
+
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="authPage">
+  <div class="auth-box">
+
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🏥</div>
+      <h1>Hospital Appointment<br>Priority System</h1>
+      <p>Manage patients with smart priority scheduling</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="auth-form active" id="formLogin">
+      <div class="field">
+        <label>Email / Staff ID</label>
+        <input id="loginEmail" type="text" placeholder="name@hospital.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPass" type="password" placeholder="Enter your password">
+      </div>
+      <div class="field">
+        <label>Role</label>
+        <select id="loginRole">
+          <option value="">Select your role</option>
+          <option>Admin</option>
+          <option>Doctor</option>
+          <option>Receptionist</option>
+        </select>
+      </div>
+      <button class="btn-auth" onclick="doLogin()">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+      </button>
+      <div class="terms">
+        Don't have an account? <span onclick="switchTab('signup')">Create one</span>
+      </div>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div class="auth-form" id="formSignup">
+      <div class="field-row">
+        <div class="field">
+          <label>First Name</label>
+          <input id="signupFirst" type="text" placeholder="e.g. Rahul">
+        </div>
+        <div class="field">
+          <label>Last Name</label>
+          <input id="signupLast" type="text" placeholder="e.g. Kumar">
+        </div>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input id="signupEmail" type="email" placeholder="name@hospital.com">
+      </div>
+      <div class="field">
+        <label>Staff ID</label>
+        <input id="signupStaffId" type="text" placeholder="e.g. DOC-2024-001">
+      </div>
+      <div class="field">
+        <label>Department</label>
+        <select id="signupDept">
+          <option value="">Select department</option>
+          <option>Cardiology</option>
+          <option>Neurology</option>
+          <option>Orthopedics</option>
+          <option>Pediatrics</option>
+          <option>General Medicine</option>
+          <option>Emergency</option>
+          <option>Administration</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Role</label>
+        <select id="signupRole">
+          <option value="">Select your role</option>
+          <option>Admin</option>
+          <option>Doctor</option>
+          <option>Receptionist</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Password</label>
+          <input id="signupPass" type="password" placeholder="Min 6 characters">
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input id="signupConfirm" type="password" placeholder="Repeat password">
+        </div>
+      </div>
+      <button class="btn-auth" onclick="doSignup()">
+        <i class="fa-solid fa-user-plus"></i> Create Account
+      </button>
+      <div class="terms">
+        Already have an account? <span onclick="switchTab('login')">Sign in</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="mainApp">
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="brand">
+          <div class="brand-icon">🏥</div>
+          <span class="brand-name">HAPS</span>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Menu</div>
+        <button class="nav-item active" onclick="showPage('dashboard',this)"><i class="fa-solid fa-gauge-high"></i> Dashboard</button>
+        <button class="nav-item" onclick="showPage('patients',this)"><i class="fa-solid fa-user-plus"></i> Patients</button>
+        <button class="nav-item" onclick="showPage('priority',this)"><i class="fa-solid fa-heart-pulse"></i> Priority Queue</button>
+        <button class="nav-item" onclick="showPage('report',this)"><i class="fa-solid fa-file-chart-column"></i> Reports</button>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-row">
+          <div class="user-av" id="sidebarAv">AD</div>
+          <div class="user-meta">
+            <div class="user-name" id="sidebarName">Admin</div>
+            <div class="user-role" id="sidebarRole">Administrator</div>
+          </div>
+          <button class="logout-btn" onclick="doLogout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+      <div class="topbar">
+        <span class="topbar-title" id="topbarTitle">Dashboard</span>
+        <div class="topbar-right">
+          <span class="topbar-time" id="topbarTime"></span>
+          <span style="font-size:12px;color:var(--text3);">|</span>
+          <span style="font-size:13px;color:var(--text2);" id="topbarUser">Admin</span>
+        </div>
+      </div>
+
+      <main class="main">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+          <div class="page-header"><h2>Dashboard</h2><p>Today's hospital appointment overview</p></div>
+          <div class="stat-grid">
+            <div class="stat-card s-teal"><div class="stat-icon"><i class="fa-solid fa-users"></i></div><div class="stat-num" id="totalCount">0</div><div class="stat-label">Total Patients</div></div>
+            <div class="stat-card s-rose"><div class="stat-icon"><i class="fa-solid fa-circle-exclamation"></i></div><div class="stat-num" id="critCount">0</div><div class="stat-label">Critical (Sev 5)</div></div>
+            <div class="stat-card s-amber"><div class="stat-icon"><i class="fa-solid fa-arrow-trend-up"></i></div><div class="stat-num" id="highCount">0</div><div class="stat-label">High Priority (3–4)</div></div>
+            <div class="stat-card s-blue"><div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div><div class="stat-num" id="lowCount">0</div><div class="stat-label">Low Priority (1–2)</div></div>
+          </div>
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head"><div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Patients</div><button class="btn btn-ghost btn-sm" onclick="loadDashboard()"><i class="fa-solid fa-rotate"></i> Refresh</button></div>
+              <div id="dashPatients"><div class="empty"><i class="fa-solid fa-users"></i>No data yet</div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="card-title"><i class="fa-solid fa-heart-pulse"></i> Top Priority</div><button class="btn btn-ghost btn-sm" onclick="loadDashboard()"><i class="fa-solid fa-rotate"></i> Refresh</button></div>
+              <div id="dashPriority"><div class="empty"><i class="fa-solid fa-heart-pulse"></i>No data yet</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATIENTS -->
+        <div class="page" id="page-patients">
+          <div class="page-header"><h2>Patient Management</h2><p>Register new patients and manage all records</p></div>
+          <div class="card">
+            <div class="card-head"><div class="card-title"><i class="fa-solid fa-user-plus"></i> Add New Patient</div></div>
+            <div class="form-grid">
+              <div class="ff"><label>Full Name</label><input id="name" placeholder="e.g. Rahul Kumar"></div>
+              <div class="ff"><label>Age</label><input id="age" type="number" placeholder="25" min="1" max="120"></div>
+              <div class="ff"><label>Gender</label><select id="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+              <div class="ff"><label>Disease / Condition</label><input id="disease" placeholder="e.g. Chest Pain"></div>
+              <div class="ff"><label>Severity (1–5)</label><input id="severity" type="number" placeholder="1 to 5" min="1" max="5"></div>
+            </div>
+            <button class="btn btn-primary" onclick="addPatient()"><i class="fa-solid fa-plus"></i> Add Patient & Book Appointment</button>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title"><i class="fa-solid fa-table-list"></i> All Patients</div></div>
+            <div class="filter-row">
+              <input id="searchName" placeholder="Search by name..." oninput="filterPatients()">
+              <select id="filterSeverity" onchange="filterPatients()">
+                <option value="">All Severities</option>
+                <option value="5">5 — Critical</option><option value="4">4 — High</option>
+                <option value="3">3 — Medium</option><option value="2">2 — Low</option><option value="1">1 — Minimal</option>
+              </select>
+              <button class="btn btn-outline" onclick="getPatients()"><i class="fa-solid fa-download"></i> Load Patients</button>
+            </div>
+            <div id="patients"><div class="empty"><i class="fa-solid fa-inbox"></i>Click "Load Patients" to view records</div></div>
+          </div>
+        </div>
+
+        <!-- PRIORITY -->
+        <div class="page" id="page-priority">
+          <div class="page-header"><h2>Priority Queue</h2><p>Patients ranked by severity — highest priority treated first</p></div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><i class="fa-solid fa-list-ol"></i> Appointment Priority List</div>
+              <button class="btn btn-primary" onclick="getPriority()"><i class="fa-solid fa-arrow-down-wide-short"></i> Load Priority List</button>
+            </div>
+            <div id="appointments"><div class="empty"><i class="fa-solid fa-heart-pulse"></i>Click "Load Priority List" to view the queue</div></div>
+          </div>
+        </div>
+
+        <!-- REPORT -->
+        <div class="page" id="page-report">
+          <div class="page-header"><h2>Appointment Report</h2><p>Filter, analyze and export appointment data</p></div>
+          <div class="card">
+            <div class="card-head"><div class="card-title"><i class="fa-solid fa-chart-bar"></i> Report</div></div>
+            <div class="filter-row">
+              <select id="reportFilter" onchange="filterReport()">
+                <option value="">All Priorities</option>
+                <option value="5">Critical (5)</option><option value="4">High (4)</option>
+                <option value="3">Medium (3)</option><option value="2">Low (2)</option><option value="1">Minimal (1)</option>
+              </select>
+              <button class="btn btn-outline" onclick="loadReport()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+              <button class="btn btn-export" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+            </div>
+            <div id="reportTable"><div class="empty"><i class="fa-solid fa-file-lines"></i>Click "Refresh" to load report data</div></div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE="http://localhost:8080";
+let allPatients=[],allAppointments=[];
+const sevLabels={1:"Minimal",2:"Low",3:"Medium",4:"High",5:"Critical"};
+const avCols=["av-teal","av-blue","av-rose","av-amber"];
+const pageTitles={dashboard:"Dashboard",patients:"Patient Management",priority:"Priority Queue",report:"Reports"};
+
+function av(n){return avCols[n.charCodeAt(0)%4];}
+function ini(n){return n.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();}
+function sevBadge(s){return`<span class="badge badge-${s}">${s} — ${sevLabels[s]||s}</span>`;}
+function prioBadge(s){
+  if(s>=5)return`<span class="badge badge-crit">CRITICAL</span>`;
+  if(s>=4)return`<span class="badge badge-high">HIGH</span>`;
+  if(s>=3)return`<span class="badge badge-med">MEDIUM</span>`;
+  return`<span class="badge badge-low">LOW</span>`;
+}
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  document.getElementById("toastMsg").textContent=msg;
+  t.style.display="flex";
+  setTimeout(()=>t.style.display="none",3000);
+}
+
+function tick(){document.getElementById("topbarTime").textContent=new Date().toLocaleTimeString();setTimeout(tick,1000);}
+tick();
+
+function switchTab(tab){
+  document.getElementById("tabLogin").classList.toggle("active",tab==="login");
+  document.getElementById("tabSignup").classList.toggle("active",tab==="signup");
+  document.getElementById("formLogin").classList.toggle("active",tab==="login");
+  document.getElementById("formSignup").classList.toggle("active",tab==="signup");
+}
+
+function doLogin(){
+  const email=document.getElementById("loginEmail").value.trim();
+  const pass=document.getElementById("loginPass").value;
+  const role=document.getElementById("loginRole").value;
+  if(!email||!pass||!role){alert("Please fill all fields!");return;}
+  enterApp(email,role);
+}
+
+function doSignup(){
+  const first=document.getElementById("signupFirst").value.trim();
+  const last=document.getElementById("signupLast").value.trim();
+  const email=document.getElementById("signupEmail").value.trim();
+  const staffId=document.getElementById("signupStaffId").value.trim();
+  const dept=document.getElementById("signupDept").value;
+  const role=document.getElementById("signupRole").value;
+  const pass=document.getElementById("signupPass").value;
+  const confirm=document.getElementById("signupConfirm").value;
+  if(!first||!last||!email||!staffId||!dept||!role||!pass||!confirm){alert("Please fill all fields!");return;}
+  if(pass.length<6){alert("Password must be at least 6 characters!");return;}
+  if(pass!==confirm){alert("Passwords do not match!");return;}
+  enterApp(first+" "+last,role);
+  showToast("Account created successfully! Welcome, "+first+".");
+}
+
+function enterApp(name,role){
+  document.getElementById("sidebarAv").textContent=ini(name);
+  document.getElementById("sidebarName").textContent=name;
+  document.getElementById("sidebarRole").textContent=role;
+  document.getElementById("topbarUser").textContent=name;
+  document.getElementById("authPage").style.display="none";
+  document.getElementById("mainApp").style.display="block";
+  loadDashboard();
+}
+
+function doLogout(){
+  document.getElementById("authPage").style.display="flex";
+  document.getElementById("mainApp").style.display="none";
+  switchTab("login");
+  ["loginEmail","loginPass","loginRole",
+   "signupFirst","signupLast","signupEmail","signupStaffId",
+   "signupDept","signupRole","signupPass","signupConfirm"]
+  .forEach(id=>{ const e=document.getElementById(id); if(e) e.value=""; });
+}
+
+function showPage(name,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-"+name).classList.add("active");
+  btn.classList.add("active");
+  document.getElementById("topbarTitle").textContent=pageTitles[name]||name;
+}
+
+function addPatient(){
+  const name=document.getElementById("name").value.trim();
+  const age=document.getElementById("age").value;
+  const gender=document.getElementById("gender").value;
+  const disease=document.getElementById("disease").value.trim();
+  const sev=document.getElementById("severity").value;
+  if(!name||!age||!gender||!disease||!sev){alert("Please fill all fields!");return;}
+  if(sev<1||sev>5){alert("Severity must be 1–5!");return;}
+  fetch(BASE+"/patients",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({name,age:parseInt(age),gender,disease,severityLevel:parseInt(sev)})})
+  .then(r=>r.json())
+  .then(d=>fetch(BASE+"/appointments/"+d.id,{method:"POST"}))
+  .then(()=>{
+    showToast("Patient added and appointment booked!");
+    ["name","age","gender","disease","severity"].forEach(id=>{const e=document.getElementById(id);if(e)e.value="";});
+    getPatients();loadDashboard();
+  }).catch(e=>alert("Error: "+e));
+}
+
+function getPatients(){
+  fetch(BASE+"/patients").then(r=>r.json())
+  .then(d=>{allPatients=d;renderPatients(d);}).catch(e=>alert("Error: "+e));
+}
+
+function renderPatients(data){
+  const el=document.getElementById("patients");
+  if(!data.length){el.innerHTML="<div class='empty'><i class='fa-solid fa-inbox'></i>No patients found.</div>";return;}
+  let h=`<div class="table-wrap"><table><thead><tr><th>ID</th><th>Patient</th><th>Age</th><th>Gender</th><th>Disease</th><th>Severity</th></tr></thead><tbody>`;
+  data.forEach(p=>{
+    h+=`<tr>
+      <td style="color:var(--text3);font-size:12px;font-weight:600;">#${p.id}</td>
+      <td><div class="name-cell"><span class="avatar ${av(p.name)}">${ini(p.name)}</span>${p.name}</div></td>
+      <td>${p.age}</td><td>${p.gender||"—"}</td><td>${p.disease}</td><td>${sevBadge(p.severityLevel)}</td>
+    </tr>`;
+  });
+  h+="</tbody></table></div>";
+  el.innerHTML=h;
+}
+
+function filterPatients(){
+  const s=document.getElementById("searchName").value.toLowerCase();
+  const f=document.getElementById("filterSeverity").value;
+  let d=allPatients;
+  if(s)d=d.filter(p=>p.name.toLowerCase().includes(s));
+  if(f)d=d.filter(p=>p.severityLevel==f);
+  renderPatients(d);
+}
+
+function getPriority(){
+  fetch(BASE+"/appointments/priority").then(r=>r.json())
+  .then(d=>{allAppointments=d;renderPriority(d);renderReport(d);}).catch(e=>alert("Error: "+e));
+}
+
+function renderPriority(data){
+  const el=document.getElementById("appointments");
+  if(!data.length){el.innerHTML="<div class='empty'><i class='fa-solid fa-heart-pulse'></i>No appointments found. Add a patient first.</div>";return;}
+  let h=`<div class="table-wrap"><table><thead><tr><th>Rank</th><th>Patient</th><th>Age</th><th>Gender</th><th>Disease</th><th>Priority</th><th>Severity</th><th>Booked At</th></tr></thead><tbody>`;
+  data.forEach((a,i)=>{
+    const p=a.patient;
+    h+=`<tr>
+      <td><span style="font-family:'Outfit',sans-serif;font-weight:800;color:var(--teal);font-size:14px;">#${i+1}</span></td>
+      <td><div class="name-cell"><span class="avatar ${av(p.name)}">${ini(p.name)}</span>${p.name}</div></td>
+      <td>${p.age}</td><td>${p.gender||"—"}</td><td>${p.disease}</td>
+      <td>${prioBadge(p.severityLevel)}</td><td>${sevBadge(p.severityLevel)}</td>
+      <td style="color:var(--text3);font-size:12px;">${new Date(a.appointmentTime).toLocaleString()}</td>
+    </tr>`;
+  });
+  h+="</tbody></table></div>";
+  el.innerHTML=h;
+}
+
+function loadReport(){getPriority();}
+
+function renderReport(data){
+  const el=document.getElementById("reportTable");
+  if(!el)return;
+  if(!data.length){el.innerHTML="<div class='empty'><i class='fa-solid fa-file-lines'></i>No data found.</div>";return;}
+  let h=`<div class="table-wrap"><table><thead><tr><th>Patient</th><th>Age</th><th>Disease</th><th>Priority</th><th>Severity Score</th><th>Appointment Time</th></tr></thead><tbody>`;
+  data.forEach(a=>{
+    const p=a.patient;
+    h+=`<tr>
+      <td><div class="name-cell"><span class="avatar ${av(p.name)}">${ini(p.name)}</span>${p.name}</div></td>
+      <td>${p.age}</td><td>${p.disease}</td>
+      <td>${prioBadge(p.severityLevel)}</td><td>${sevBadge(p.severityLevel)}</td>
+      <td style="color:var(--text3);font-size:12px;">${new Date(a.appointmentTime).toLocaleString()}</td>
+    </tr>`;
+  });
+  h+="</tbody></table></div>";
+  el.innerHTML=h;
+}
+
+function filterReport(){
+  const f=document.getElementById("reportFilter").value;
+  let d=allAppointments;
+  if(f)d=d.filter(a=>a.patient.severityLevel==f);
+  renderReport(d);
+}
+
+function exportCSV(){
+  if(!allAppointments.length){alert("Load the report first!");return;}
+  let csv="Patient,Age,Gender,Disease,Severity,Priority,Appointment Time\n";
+  allAppointments.forEach(a=>{
+    const p=a.patient;
+    csv+=`${p.name},${p.age},${p.gender||""},${p.disease},${p.severityLevel},${sevLabels[p.severityLevel]||""},${new Date(a.appointmentTime).toLocaleString()}\n`;
+  });
+  const blob=new Blob([csv],{type:"text/csv"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="haps_report.csv";a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadDashboard(){
+  fetch(BASE+"/patients").then(r=>r.json()).then(data=>{
+    allPatients=data;
+    document.getElementById("totalCount").textContent=data.length;
+    document.getElementById("critCount").textContent=data.filter(p=>p.severityLevel>=5).length;
+    document.getElementById("highCount").textContent=data.filter(p=>p.severityLevel>=3&&p.severityLevel<5).length;
+    document.getElementById("lowCount").textContent=data.filter(p=>p.severityLevel<3).length;
+    document.getElementById("dashPatients").innerHTML=data.slice(-5).reverse().map(p=>`
+      <div class="q-item">
+        <span class="avatar ${av(p.name)}">${ini(p.name)}</span>
+        <div class="q-info"><div class="q-name">${p.name}</div><div class="q-sub">${p.disease} · Age ${p.age}</div></div>
+        ${prioBadge(p.severityLevel)}
+      </div>`).join("")||"<div class='empty'><i class='fa-solid fa-users'></i>No patients yet</div>";
+  }).catch(()=>{});
+  fetch(BASE+"/appointments/priority").then(r=>r.json()).then(data=>{
+    allAppointments=data;
+    document.getElementById("dashPriority").innerHTML=data.slice(0,5).map((a,i)=>`
+      <div class="q-item">
+        <span class="q-rank">#${i+1}</span>
+        <span class="avatar ${av(a.patient.name)}">${ini(a.patient.name)}</span>
+        <div class="q-info"><div class="q-name">${a.patient.name}</div><div class="q-sub">${a.patient.disease}</div></div>
+        ${prioBadge(a.patient.severityLevel)}
+      </div>`).join("")||"<div class='empty'><i class='fa-solid fa-heart-pulse'></i>No appointments yet</div>";
+  }).catch(()=>{});
+}
+</script>
+</body>
+</html>
